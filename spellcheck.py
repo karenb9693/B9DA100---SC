@@ -10,6 +10,9 @@ class SpellChecker(object):
 
     def load_words(self, file_name):
         self.words = self.load_file(file_name)
+        
+    def check_profanities(self, word):
+        return word not in ['fuck', 'shit']
 
     def check_document(self, file_name):
         self.sentences = self.load_file(file_name)
@@ -31,6 +34,9 @@ class SpellChecker(object):
             if not self.check_word(word):
                 print('Word is misspelt ' + word + ' at line : ' + str(index+1) + ' pos ' + str(caret_position+1))
                 failed_words.append({'word':word,'line':index+1,'pos':caret_position+1})
+            if not self.check_profanities(word):
+                print('Word is a profanity ' + word + ' at line : ' + str(index+1) + ' pos ' + str(caret_position+1))
+                failed_words.append({'word':word, 'line':index+1,'pos':caret_position+1, 'type': 'profanity'})
             # update the caret position to be the length of the word plus 1 for the split character.
             caret_position = caret_position + len(word) + 1
         return failed_words
